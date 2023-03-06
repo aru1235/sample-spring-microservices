@@ -1,37 +1,63 @@
- //using hostname.
+ pipeline {
+    agent any
 
-//[code language="java"]
-node {
-
-    withMaven(maven:'maven') {
-
-        stage('Checkout') {
-            git url: 'https://github.com/saurabh0010/sample-spring-microservices.git', CredentialsID: 'github', branch: 'master'
-        }
-
-        stage('Build') {
-            sh 'mvn clean install'
-
-            def pom = readMavenPom file:'pom.xml'
-            print pom.version
-            env.version = pom.version
-        }
-
-        stage('Image') {
-            dir ('account-service') {
-                def app = docker.build "localhost:5000/account-service:${env.version}"
-                app.push()
-            }
-        }
-
-        stage ('Run') {
-            docker.image("localhost:5000/account-service:${env.version}").run('-p 2222:2222 -h account --name account --link discovery')
-        }
-
-        stage ('Final') {
-            build job: 'customer-service-pipeline', wait: false
-        }      
-
+    environment {
+        ECR_REGISTRY = "https://398443246513.dkr.ecr.us-east-1.amazonaws.com"
+        ECR_REPOSITORY = "ci-ecr"
+        DOCKER_IMAGE_TAG = "feature"
     }
 
+
+  
+    stages {
+
+        stage('Clone repository') { 
+            steps { 
+                script{
+                checkout scm
+                }
+            }
+        }
+        stage('change directory') {
+            steps {
+              dir('account-service') {
+                  sh'ls -la'
+                  
+              }
+            }
+        }
+        stage ('Build') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+                sh 'mvn clean install'
+                
+            }
+        }
+        
+        
+
+        
+        stage('Build Docker image') {
+            steps {
+              dir('account-service') {
+                sh 'docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG .'
+              }
+      }
+    }
+
+        stage('Login to ECR') {
+            steps {
+                withCredentials([awsEcr(credentialsId: 'aws-credential', region: 'us-east-1')]) {
+                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY'
+        }
+      }
+    }
+
+        stage('Push Docker image to ECR') {
+            steps {
+                sh 'docker push $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG'
+      }
+    }
+    }
 }
