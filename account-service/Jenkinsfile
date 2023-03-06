@@ -22,7 +22,6 @@
             steps { 
                 sh 'printenv'
                 sh 'echo "--------------------"'
-                sh 'echo 'Pulling...' + env.BRANCH_NAME'
             }
         }
 
