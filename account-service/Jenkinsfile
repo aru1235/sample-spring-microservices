@@ -36,11 +36,11 @@
         }
         stage ('Build') {
             steps {
-              dir('account-service') {
+
                 sh 'pwd'
                 sh 'ls -la'
                 sh 'mvn clean install'
-                }
+
             }
         }
         
@@ -49,10 +49,12 @@
         
         stage('Build Docker image') {
             steps {
+              dir('account-service') {
                 sh 'docker build -t account-service .'
                 sh 'docker tag account-service:feature public.ecr.aws/y0j0v8z3/account-service:feature'
                 sh 'echo "printing next command"'
                 sh 'docker images'
+                }
       }
     }
 
