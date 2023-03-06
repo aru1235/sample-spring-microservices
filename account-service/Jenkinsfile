@@ -70,7 +70,7 @@
 
         stage('Push Docker image to ECR') {
             steps {
-                aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y0j0v8z3
+                sh 'docker push $ECR_REGISTRY/$ECR_REPOSITORY:env.BRANCH_NAME'
       }
     }
     }
