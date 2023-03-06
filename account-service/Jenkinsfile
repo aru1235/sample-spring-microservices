@@ -63,14 +63,14 @@
         stage('Login to ECR') {
             steps {
                 withCredentials([awsEcr(credentialsId: 'aws-credential', region: 'us-east-1')]) {
-                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY'
+                    sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y0j0v8z3'
         }
       }
     }
 
         stage('Push Docker image to ECR') {
             steps {
-                sh 'docker push $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG'
+                sh 'docker push 398443246513.dkr.ecr.us-east-1.amazonaws.com/account-service:feature'
       }
     }
     }
