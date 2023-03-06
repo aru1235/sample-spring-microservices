@@ -18,6 +18,15 @@
                 }
             }
         }
+        stage('default env var') { 
+            steps { 
+                sh 'printenv'
+                sh 'echo "--------------------"'
+                sh 'echo 'Pulling...' + env.BRANCH_NAME'
+            }
+        }
+
+        
         stage('change directory') {
             steps {
               dir('account-service') {
@@ -28,10 +37,11 @@
         }
         stage ('Build') {
             steps {
+              dir('account-service') {
                 sh 'pwd'
                 sh 'ls -la'
                 sh 'mvn clean install'
-                
+                }
             }
         }
         
@@ -40,9 +50,7 @@
         
         stage('Build Docker image') {
             steps {
-              dir('account-service') {
                 sh 'docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG .'
-              }
       }
     }
 
