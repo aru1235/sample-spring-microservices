@@ -2,7 +2,7 @@
     agent any
 
     environment {
-        ECR_REGISTRY = "https://398443246513.dkr.ecr.us-east-1.amazonaws.com"
+        ECR_REGISTRY = "398443246513.dkr.ecr.us-east-1.amazonaws.com"
         ECR_REPOSITORY = "ci-ecr"
         DOCKER_IMAGE_TAG = "feature"
     }
@@ -51,7 +51,9 @@
             steps {
               dir('account-service') {
                 sh 'docker build -t account-service .'
-                sh 'docker tag account-service:feature public.ecr.aws/y0j0v8z3/account-service:feature'
+                sh 'docker images'
+                sh 'echo "tagging the docker image from latest to feature"'
+                sh 'docker tag account-service:latest 398443246513.dkr.ecr.us-east-1.amazonaws.com/account-service:feature'
                 sh 'echo "printing next command"'
                 sh 'docker images'
                 }
