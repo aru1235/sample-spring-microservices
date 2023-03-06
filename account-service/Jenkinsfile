@@ -62,7 +62,7 @@
 
         stage('Login to ECR') {
             steps {
-                 withDockerRegistry(credentialsId: 'ecr:us-east-1:aws-credential') {
+               withCredentials([awsEcr(credentialsId: 'aws-credential', region: 'us-east-1')]) {
                   sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y0j0v8z3'
              }
       }
