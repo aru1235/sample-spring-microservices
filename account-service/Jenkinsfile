@@ -33,7 +33,7 @@
                 withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
                     sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y0j0v8z3'
                     sh 'docker tag acc_imag:env.BRANCH_NAME public.ecr.aws/y0j0v8z3/acc_imag:env.BRANCH_NAME'
-                    sh 'docker push public.ecr.aws/y0j0v8z3/acc_imag:env.BRANCH_NAME'
+                    sh 'docker push public.ecr.aws/y0j0v8z3/test-ecr:env.BRANCH_NAME'
                 }
             }
         }
