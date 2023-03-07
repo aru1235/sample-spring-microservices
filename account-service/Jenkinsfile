@@ -23,7 +23,9 @@
         }
         stage('Docker Image Build') {
             steps {
+                dir('account-service'){
                 sh 'docker build -t acc_imag:env.BRANCH_NAME .'
+                }
             }
         }
         stage('Push Docker Image to ECR') {
