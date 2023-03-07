@@ -1,14 +1,7 @@
  pipeline {
+   
     agent any
 
-    environment {
-        ECR_REGISTRY = "398443246513.dkr.ecr.us-east-1.amazonaws.com"
-        ECR_REPOSITORY = "ci-ecr"
-        DOCKER_IMAGE_TAG = "feature"
-    }
-
-
-  
     stages {
 
         stage('Clone repository') { 
@@ -18,60 +11,30 @@
                 }
             }
         }
-        stage('default env var') { 
-            steps { 
-                sh 'printenv'
-                sh 'echo "--------------------"'
-            }
-        }
-
-        
-        stage('change directory') {
+        stage('Build Jar') {
             steps {
-              dir('account-service') {
-                  sh'ls -la'
-                  
-              }
-            }
-        }
-        stage ('Build') {
-            steps {
-
                 sh 'pwd'
                 sh 'ls -la'
-                sh 'mvn clean install'
-
+                dir('account-service'){
+                sh 'mvn clean package'
             }
         }
-        
-        
 
-        
-        stage('Build Docker image') {
+        }
+        stage('Docker Image Build') {
             steps {
-              dir('account-service') {
-                sh 'docker build -t account-service .'
-                sh 'docker images'
-                sh 'echo "tagging the docker image from latest to feature"'
-                sh 'docker tag account-service:latest 398443246513.dkr.ecr.us-east-1.amazonaws.com/account-service:feature'
-                sh 'echo "printing next command"'
-                sh 'docker images'
+                sh 'docker build -t acc_imag:env.BRANCH_NAME .'
+            }
+        }
+        stage('Push Docker Image to ECR') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
+                    sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y0j0v8z3'
+                    sh 'docker tag acc_imag:env.BRANCH_NAME public.ecr.aws/y0j0v8z3/acc_imag:env.BRANCH_NAME'
+                    sh 'docker push public.ecr.aws/y0j0v8z3/acc_imag:env.BRANCH_NAME'
                 }
-      }
-    }
+            }
+        }
 
-        stage('Login to ECR') {
-            steps {
-               withCredentials([awsEcr(credentialsId: 'aws-credential', region: 'us-east-1')]) {
-                  sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y0j0v8z3'
-             }
-      }
-    }
-
-        stage('Push Docker image to ECR') {
-            steps {
-                sh 'docker push $ECR_REGISTRY/$ECR_REPOSITORY:env.BRANCH_NAME'
-      }
-    }
     }
 }
