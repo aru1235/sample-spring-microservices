@@ -23,7 +23,7 @@
         }
         stage('Docker Image Build') {
             steps {
-                sh 'docker build -t acc_imag:env.BRANCH_NAME .'
+                sh 'sudo docker build -t acc_imag:env.BRANCH_NAME .'
             }
         }
         stage('Push Docker Image to ECR') {
