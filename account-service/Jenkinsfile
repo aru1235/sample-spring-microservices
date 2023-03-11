@@ -11,22 +11,32 @@
                 }
             }
         }
+        stage('Build Jar') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+                dir('account-service'){
+                sh 'mvn clean package'
+                }
+            }
 
-
-        stage('branch name') { 
-            steps { 
-               script{
-                  image_version = env.${GIT_BRANCH}.replace("/", "-")
-               
+        }
+        stage('Docker Image Build') {
+            steps {
+                dir('account-service'){
+                sh 'docker build -t new-ecr .'
+                }
             }
         }
-    }
-
-        stage('branch show') { 
-            steps { 
-               sh 'echo "${image_version}"' 
-       
+        stage('Push Docker Image to ECR') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
+                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 398443246513.dkr.ecr.us-east-1.amazonaws.com'
+                    sh 'docker tag new-ecr:latest 398443246513.dkr.ecr.us-east-1.amazonaws.com/new-ecr:feature'
+                    sh 'docker push 398443246513.dkr.ecr.us-east-1.amazonaws.com/new-ecr:feature'
+                }
             }
         }
+
     }
- }
+}
