@@ -16,7 +16,7 @@
             steps { 
                 sh 'ls -la'
                 sh 'printenv'
-                sh 'echo "the branch name is ${GIT_BRANCH}'
+                sh 'echo "the branch name is ${GIT_BRANCH}"'
                 
                 
             }
