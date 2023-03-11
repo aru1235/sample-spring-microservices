@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
    
     agent any
 
@@ -12,6 +12,7 @@ pipeline {
             }
         }
 
+
         stage('branch show') { 
             steps { 
                script{
@@ -20,11 +21,12 @@ pipeline {
             }
         }
     }
-      stage('branch show') { 
+
+        stage('branch show') { 
             steps { 
                sh 'echo "${image_version}"' 
        
-}
-      }
+            }
+        }
     }
-}
+ }
