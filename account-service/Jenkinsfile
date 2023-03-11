@@ -24,7 +24,7 @@
         stage('Docker Image Build') {
             steps {
                 dir('account-service'){
-                sh 'docker build -t my-imag .'
+                sh 'docker build -t my-ecr .'
                 }
             }
         }
