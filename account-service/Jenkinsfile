@@ -15,7 +15,7 @@
         stage('branch show') { 
             steps { 
                 sh 'ls -la'
-                sh 'git pull --all'
+                sh 'git branch'
                 sh 'git symbolic-ref --short HEAD'
                 sh 'branch_name=$(git rev-parse --abbrev-ref HEAD)'
                 sh 'echo "present branch name is ${branch_name}"'
