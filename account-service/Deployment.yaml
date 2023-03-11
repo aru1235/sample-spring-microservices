@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-acc
+  name: my-deploy
 spec:
   selector:
     matchLabels:
@@ -32,3 +32,5 @@ spec:
   - port: 80
     targetPort: 8080
     nodePort: 30036
+
+
