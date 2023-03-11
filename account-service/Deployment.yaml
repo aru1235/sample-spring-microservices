@@ -1,14 +1,12 @@
-apiVersion: apps/v1
+apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: account-services
-  labels:
-    app: ac
+  name: account-service
 spec:
-  replicas: 3
   selector:
     matchLabels:
       app: ac
+  replicas: 3
   template:
     metadata:
       labels:
