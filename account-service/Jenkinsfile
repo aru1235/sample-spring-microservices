@@ -1,4 +1,4 @@
- pipeline {
+pipeline {
    
     agent any
 
@@ -30,13 +30,24 @@
         }
         stage('Push Docker Image to ECR') {
             steps {
-                withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
-                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 398443246513.dkr.ecr.us-east-1.amazonaws.com'
-                    sh 'docker tag new-ecr:latest 398443246513.dkr.ecr.us-east-1.amazonaws.com/new-ecr:feature'
-                    sh 'docker push 398443246513.dkr.ecr.us-east-1.amazonaws.com/new-ecr:feature'
+                withAWS(credentials: 'aws-credentials', region: 'ap-south-1') {
+                    sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 398443246513.dkr.ecr.ap-south-1.amazonaws.com'
+                    sh 'docker tag new-ecr:latest 398443246513.dkr.ecr.ap-south-1.amazonaws.com/new-ecr:feature'
+                    sh 'docker push 398443246513.dkr.ecr.ap-south-1.amazonaws.com/new-ecr:feature'
                 }
             }
         }
+
+        stage('Integrate Jenkins with EKS Cluster and Deploy App') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: 'ap-south-1') {
+                  script {
+                    sh ('aws eks update-kubeconfig --name new2-cluster --region ap-south-1')
+                    sh "kubectl apply -f Deployment.yaml"
+                }
+                }
+        }
+    }
 
     }
 }
