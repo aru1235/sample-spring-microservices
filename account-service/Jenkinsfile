@@ -17,8 +17,7 @@
                 sh 'ls -la'
                 sh 'printenv'
                 sh 'echo "the branch name is ${GIT_BRANCH}"'
-                sh 'branch_name=$(echo "${GIT_BRANCH}" | cut -d'/' -f2)'
-                sh 'echo "branch name is ${branch_name}"'
+             
                 
             }
         }
