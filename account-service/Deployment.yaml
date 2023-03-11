@@ -2,13 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: account-services
-  labels:
-    app: ms
 spec:
-  replicas: 2
-    selector:
-      matchLabels:
-        app: ms
+  selector:
+    matchLabels:
+      app: ms
   template:
     metadata:
       labels:
@@ -19,6 +16,7 @@ spec:
         image: 398443246513.dkr.ecr.ap-south-1.amazonaws.com/new-ecr:feature
         ports:
         - containerPort: 80
+
 
 ---
 
@@ -34,3 +32,4 @@ spec:
   - port: 80
     targetPort: 8080
     nodePort: 30036
+
