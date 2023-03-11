@@ -23,34 +23,6 @@
             }
         }
 
-    
-        stage('Build Jar') {
-            steps {
-                sh 'pwd'
-                sh 'ls -la'
-                dir('account-service'){
-                sh 'mvn clean package'
-            }
-        }
-
-        }
-        stage('Docker Image Build') {
-            steps {
-                dir('account-service'){
-                sh 'docker build -t my-ecr .'
-                }
-            }
-        }
-        stage('Push Docker Image to ECR') {
-            steps {
-                withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
-                    sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y0j0v8z3'
-                    sh 'docker tag my-ecr:latest public.ecr.aws/y0j0v8z3/my-ecr:${branch_name}'
-                    sh 'docker push public.ecr.aws/y0j0v8z3/my-ecr:${branch_name}'
-                }
-            }
-        }
-
     }
 }
 
