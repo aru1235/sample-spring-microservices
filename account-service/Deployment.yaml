@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: account-service
+  labels: ac
 spec:
   selector:
     matchLabels:
