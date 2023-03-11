@@ -13,7 +13,7 @@
         }
 
 
-        stage('branch show') { 
+        stage('branch name') { 
             steps { 
                script{
                   image_version = env.${GIT_BRANCH}.replace("/", "-")
