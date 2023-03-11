@@ -14,8 +14,8 @@
 
         stage('branch show') { 
             steps { 
-               sh 'chmod +x getbranch.sh'
-               sh './getbranch.sh'
+               sh 'chmod +x get_branch.sh'
+               sh './get_branch.sh'
              
             }
         }
