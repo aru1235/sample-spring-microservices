@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my_acc
+  name: my-acc
 spec:
   selector:
     matchLabels:
