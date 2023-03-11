@@ -18,7 +18,6 @@
                 dir('account-service'){
                 sh 'mvn clean package'
                 sh 'git symbolic-ref --short HEAD'
-                sh 'git branch | sed -n '1{s/^* *//;p}''
                 sh 'branch_name=$(git rev-parse --abbrev-ref HEAD)'
                 sh 'echo "present branch name is ${branch_name}"'
             }
