@@ -1,24 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name:  acc-ser
+  namespace: default
   labels:
-    app: ac
-  name: account-service
+    app:  ac
 spec:
-  replicas: 3
   selector:
     matchLabels:
       app: ac
+  replicas: 1
   template:
     metadata:
       labels:
-        app: ac
+        app:  ac
     spec:
       containers:
-      - name: ac-image
-        image: 398443246513.dkr.ecr.ap-south-1.amazonaws.com/off-ecr:feature1
+      - name:  acc-imag
+        image:  398443246513.dkr.ecr.ap-south-1.amazonaws.com/off-ecr:feature1
         ports:
-        - containerPort: 2222
+        - containerPort:  2222
 ---
 apiVersion: v1
 kind: Service
