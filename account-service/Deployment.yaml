@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-services
   labels:
     app: ac
+  name: account-services
 spec:
   replicas: 1
   selector:
@@ -17,11 +17,13 @@ spec:
       containers:
       - name: ac-image
         image: 398443246513.dkr.ecr.ap-south-1.amazonaws.com/off-ecr:feature1
+        imagePullPolicy: Always
         ports:
         - containerPort: 2222
-
+          name: http
+          protocol: TCP
+# service type loadbalancer       
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -34,4 +36,3 @@ spec:
   - port: 80
     targetPort: 2222
     nodePort: 30036
-
