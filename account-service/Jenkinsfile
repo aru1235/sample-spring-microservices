@@ -29,6 +29,16 @@ pipeline {
             }
         }
 
+        stage('Push Docker Image to ECR') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: 'ap-south-1') {
+                    sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 398443246513.dkr.ecr.ap-south-1.amazonaws.com'
+                    sh 'docker tag off-ecr:latest 398443246513.dkr.ecr.ap-south-1.amazonaws.com/off-ecr:feature1'
+                    sh 'docker push 398443246513.dkr.ecr.ap-south-1.amazonaws.com/off-ecr:feature1'
+                }
+            }
+        }
+
     }
 
 }
