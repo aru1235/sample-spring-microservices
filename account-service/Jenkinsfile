@@ -15,16 +15,20 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
+                dir('account-service'){
                 sh 'mvn clean package'
-                
+                }
             }
 
         }
-       stage('Docker Image Build') {
+        stage('Docker Image Build') {
             steps {
-                sh 'ls -la'
+                dir('account-service'){
                 sh 'docker build -t off-ecr .'
+                }
             }
         }
+
     }
+
 }
