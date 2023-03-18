@@ -15,43 +15,10 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
-                dir('account-service'){
                 sh 'mvn clean package'
-                }
+                
             }
 
         }
-        stage('Docker Image Build') {
-            steps {
-                dir('account-service'){
-                sh 'docker build -t new-ecr .'
-                }
-            }
-        }
-        stage('Push Docker Image to ECR') {
-            steps {
-                withAWS(credentials: 'aws-credentials', region: 'ap-south-1') {
-                    sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 398443246513.dkr.ecr.ap-south-1.amazonaws.com'
-                    sh 'docker tag new-ecr:latest 398443246513.dkr.ecr.ap-south-1.amazonaws.com/new-ecr:feature'
-                    sh 'docker push 398443246513.dkr.ecr.ap-south-1.amazonaws.com/new-ecr:feature'
-                }
-            }
-        }
-
-        stage('Integrate Jenkins with EKS Cluster and Deploy App') {
-            steps {
-                withAWS(credentials: 'aws-credentials', region: 'ap-south-1') {
-                  script {
-                    sh ('aws eks update-kubeconfig --name new2-cluster --region ap-south-1')
-                    sh 'ls -la'
-                    dir('account-service'){
-                    sh "kubectl apply -f Deployment.yaml --validate=false"
-
-                    }
-                }
-             }
-        }
-    }
-
     }
 }
