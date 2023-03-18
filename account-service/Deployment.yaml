@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   labels:
     app: ac
-    name: account-services
-  spec:
-    replicas: 1
-    selector: null
+  name: account-service
+spec:
+  replicas: 2
+  selector:
     matchLabels:
       app: ac
   template:
@@ -15,15 +15,10 @@ metadata:
         app: ac
     spec:
       containers:
-        - name: ac-image
-          image: 398443246513.dkr.ecr.ap-south-1.amazonaws.com/off-ecr:feature1
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 2222
-              name: http
-              protocol: TCP
-
-# service type loadbalancer       
+      - name: ac-image
+        image: 398443246513.dkr.ecr.ap-south-1.amazonaws.com/off-ecr:feature1
+        ports:
+        - containerPort: 2222
 ---
 apiVersion: v1
 kind: Service
